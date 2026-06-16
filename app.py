@@ -1,5 +1,5 @@
-from flask import Flask, request, jsonify
 from flask_cors import CORS
+from flask import Flask, request, jsonify, render_template
 
 from recommender import (
     load_spotify_playlist,
@@ -24,6 +24,10 @@ print("Loading movies...")
 movies = load_movies('data/tmdb_5000_movies.csv')
 
 print("Moodify is ready!")
+
+@app.route('/')
+def home():
+    return render_template('index.html')
 
 
 # ── Health check ──────────────────────────────────────────────────────────────

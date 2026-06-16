@@ -6,8 +6,7 @@ import numpy as np
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics.pairwise import cosine_similarity
 from dotenv import load_dotenv
-import spotipy
-from spotipy.oauth2 import SpotifyOAuth
+
 
 load_dotenv()
 
@@ -31,67 +30,31 @@ mood_genres = {
 VALID_MOODS = list(mood_profiles.keys())
 
 
-# ── Spotify: load your personal playlist ────────────────────────────────────
+# ── kaggle file────────────────────────────────────
 def load_spotify_playlist():
     """
-    Fetches all tracks + audio features from your Spotify playlist
-    defined in SPOTIFY_PLAYLIST_ID in your .env file.
-    Returns a DataFrame with the same columns as your Kaggle tracks CSV.
+    Loads songs from local CSV instead of Spotify API.
     """
-    sp = spotipy.Spotify(auth_manager=SpotifyOAuth(
-        client_id=os.getenv("SPOTIPY_CLIENT_ID"),
-        client_secret=os.getenv("SPOTIPY_CLIENT_SECRET"),
-        redirect_uri=os.getenv("SPOTIPY_REDIRECT_URI"),
-        scope="playlist-read-private playlist-read-collaborative"
-    ))
 
-    playlist_id = os.getenv("SPOTIFY_PLAYLIST_ID")
-    if not playlist_id:
-        raise ValueError("SPOTIFY_PLAYLIST_ID not set in .env file")
+    tracks = pd.read_csv(
+        r"C:\Users\5soum\OneDrive\Desktop\Moodify\data\tracks_english.csv"
+    )
 
-    # Collect all tracks (Spotify paginates at 100 per page)
-    all_items = []
-    results = sp.playlist_tracks(playlist_id, limit=100)
-    while results:
-        all_items.extend(results['items'])
-        results = sp.next(results) if results['next'] else None
+    tracks = tracks[
+        [
+            'track_name',
+            'artists',
+            'track_genre',
+            'valence',
+            'energy',
+            'danceability',
+            'tempo'
+        ]
+    ].dropna()
 
-    # Filter out null/local tracks
-    valid_items = [
-        item for item in all_items
-        if item.get('track') and item['track'].get('id')
-    ]
+    print(f"[CSV] Loaded {len(tracks)} tracks")
 
-    if not valid_items:
-        raise ValueError("No valid tracks found in the playlist.")
-
-    track_ids = [item['track']['id'] for item in valid_items]
-
-    # Fetch audio features in batches of 100 (Spotify API limit)
-    all_features = []
-    for i in range(0, len(track_ids), 100):
-        batch = sp.audio_features(track_ids[i:i + 100])
-        all_features.extend(batch)
-
-    rows = []
-    for item, feat in zip(valid_items, all_features):
-        if not feat:
-            continue
-        track = item['track']
-        rows.append({
-            'track_name':   track['name'],
-            'artists':      ', '.join(a['name'] for a in track['artists']),
-            'track_genre':  'spotify-playlist',   # placeholder genre
-            'valence':      feat['valence'],
-            'energy':       feat['energy'],
-            'danceability': feat['danceability'],
-            'tempo':        feat['tempo'],
-        })
-
-    df = pd.DataFrame(rows)
-    print(f"[Spotify] Loaded {len(df)} tracks from your playlist.")
-    return df
-
+    return tracks
 
 # ── Scale track features ─────────────────────────────────────────────────────
 def prepare_tracks(tracks: pd.DataFrame):
@@ -177,7 +140,7 @@ If unsure, default to "chill".
         resp = requests.post(
             "http://localhost:11434/api/chat",
             json=payload,
-            timeout=30
+            timeout=120
         )
         resp.raise_for_status()
         raw = resp.json()["message"]["content"].strip()
