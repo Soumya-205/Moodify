@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moodify</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Header -->
+    <div class="header">
+        <div class="logo-section">
+            <div class="logo"></div>
+            <h1>Moodify</h1>
+        </div>
+
+        <div class="status">
+            <span class="dot"></span>
+            LLaMA3 ready
+        </div>
+    </div>
+
+    <!-- Mood Buttons -->
+    <div class="moods">
+        <button>😊 happy</button>
+        <button>😌 chill</button>
+        <button>⚡ energetic</button>
+        <button>☁ sad</button>
+        <button class="active">💫 romantic</button>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main">
+
+        <!-- Chat Panel -->
+        <div class="chat-panel">
+
+            <div class="chat-area">
+
+                <div class="message bot">
+                    <p>
+                        Hey! I'm Moodify 🎵 Tell me how you're feeling and I'll
+                        match your vibe with songs from your Spotify and some
+                        great films.
+                    </p>
+                    <span class="tag">ready</span>
+                </div>
+
+            </div>
+
+            <div class="input-box">
+                <input
+                    type="text"
+                    placeholder="Tell me how you're feeling..."
+                >
+                <button id="sendBtn">➤</button>
+            </div>
+
+        </div>
+
+        <!-- Recommendations -->
+        <div class="recommendation-panel">
+
+            <div class="tabs">
+                <button class="tab active-tab">🎵 Songs</button>
+                <button class="tab">🎬 Movies</button>
+            </div>
+
+            <div class="songs"></div>
+            <div class="movies" style="display:none;"></div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
