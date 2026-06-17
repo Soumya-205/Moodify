@@ -4,32 +4,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Moodify</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">">
+
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='32' fill='%23B5446E'/%3E%3Cpath d='M24 20v22a5 5 0 1 1-3-4.6V24h14v14a5 5 0 1 1-3-4.6V20z' fill='white'/%3E%3C/svg%3E">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Manrope:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body>
+<body data-mood="romantic">
 
 <div class="container">
 
     <!-- Header -->
-    <div class="header">
-        <div class="logo-section">
-            <div class="logo"></div>
-            <h1>Moodify</h1>
+    <header class="header">
+        <div class="brand">
+            <div class="eq" aria-hidden="true">
+                <span></span><span></span><span></span><span></span>
+            </div>
+            <div class="brand-text">
+                <h1>Moodify</h1>
+                <p class="tagline">songs &amp; films, tuned to how you feel</p>
+            </div>
         </div>
 
         <div class="status">
             <span class="dot"></span>
-            LLaMA3 ready
+            <span class="status-text">LLaMA3 ready</span>
         </div>
-    </div>
+    </header>
 
     <!-- Mood Buttons -->
-    <div class="moods">
-        <button>😊 happy</button>
-        <button>😌 chill</button>
-        <button>⚡ energetic</button>
-        <button>☁ sad</button>
-        <button class="active">💫 romantic</button>
+    <div class="moods" role="group" aria-label="Choose your mood">
+        <button class="mood-pill" data-mood="happy" aria-pressed="false">😊 <span>happy</span></button>
+        <button class="mood-pill" data-mood="chill" aria-pressed="false">😌 <span>chill</span></button>
+        <button class="mood-pill" data-mood="energetic" aria-pressed="false">⚡ <span>energetic</span></button>
+        <button class="mood-pill" data-mood="sad" aria-pressed="false">☁ <span>sad</span></button>
+        <button class="mood-pill active" data-mood="romantic" aria-pressed="true">💫 <span>romantic</span></button>
     </div>
 
     <!-- Main Content -->
@@ -38,15 +50,18 @@
         <!-- Chat Panel -->
         <div class="chat-panel">
 
-            <div class="chat-area">
+            <div class="chat-area" id="chatArea" aria-live="polite">
 
                 <div class="message bot">
-                    <p>
-                        Hey! I'm Moodify 🎵 Tell me how you're feeling and I'll
-                        match your vibe with songs from your Spotify and some
-                        great films.
-                    </p>
-                    <span class="tag">ready</span>
+                    <div class="avatar">🎧</div>
+                    <div class="bubble">
+                        <p>
+                            Hey! I'm Moodify 🎵 Tell me how you're feeling and I'll
+                            match your vibe with songs from your Spotify and some
+                            great films.
+                        </p>
+                        <span class="tag">ready</span>
+                    </div>
                 </div>
 
             </div>
@@ -54,9 +69,16 @@
             <div class="input-box">
                 <input
                     type="text"
+                    id="userInput"
                     placeholder="Tell me how you're feeling..."
+                    autocomplete="off"
                 >
-                <button id="sendBtn">➤</button>
+                <button id="sendBtn" aria-label="Send message">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                    </svg>
+                </button>
             </div>
 
         </div>
@@ -64,13 +86,25 @@
         <!-- Recommendations -->
         <div class="recommendation-panel">
 
-            <div class="tabs">
-                <button class="tab active-tab">🎵 Songs</button>
-                <button class="tab">🎬 Movies</button>
+            <div class="tabs" role="tablist">
+                <button class="tab active-tab" id="songsTab" role="tab" aria-selected="true">🎵 Songs</button>
+                <button class="tab" id="moviesTab" role="tab" aria-selected="false">🎬 Movies</button>
             </div>
 
-            <div class="songs"></div>
-            <div class="movies" style="display:none;"></div>
+            <div class="songs" id="songsList" role="tabpanel">
+                <div class="empty-state">
+                    <span class="empty-icon">♪</span>
+                    <p>No songs yet</p>
+                    <span>Tell me your mood, or pick one above to get started.</span>
+                </div>
+            </div>
+            <div class="movies" id="moviesList" role="tabpanel" style="display:none;">
+                <div class="empty-state">
+                    <span class="empty-icon">🎬</span>
+                    <p>No movies yet</p>
+                    <span>Tell me your mood, or pick one above to get started.</span>
+                </div>
+            </div>
 
         </div>
 

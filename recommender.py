@@ -192,7 +192,7 @@ def generate_reply_ollama(user_text: str, mood: str,
     prompt = f"""The user said: "{user_text}"
 Detected mood: {mood}
 
-Songs from their Spotify playlist (matched to mood):
+Songs from the playlist (matched to mood):
 {song_list}
 
 Movie recommendations:
