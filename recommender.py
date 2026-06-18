@@ -96,6 +96,20 @@ def _extract_genres(genre_str: str) -> list:
     except Exception:
         return []
 
+def fetch_poster(title: str) -> str:
+    """Fetches movie poster URL from TMDB API by title."""
+    api_key = os.getenv("TMDB_API_KEY")
+    try:
+        search_url = f"https://api.themoviedb.org/3/search/movie"
+        params = {"api_key": api_key, "query": title}
+        resp = requests.get(search_url, params=params, timeout=5)
+        data = resp.json()
+        results = data.get("results", [])
+        if results and results[0].get("poster_path"):
+            return f"https://image.tmdb.org/t/p/w200{results[0]['poster_path']}"
+    except Exception:
+        pass
+    return ""
 
 def recommend_movies(mood: str, movies: pd.DataFrame, n: int = 5) -> pd.DataFrame:
     target_genres = mood_genres[mood]
@@ -107,7 +121,12 @@ def recommend_movies(mood: str, movies: pd.DataFrame, n: int = 5) -> pd.DataFram
     ].copy()
 
     matching = matching.sort_values('vote_average', ascending=False)
-    return matching[['title', 'genre_list', 'vote_average']].head(n).reset_index(drop=True)
+    result = matching[['title', 'genre_list', 'vote_average']].head(n).reset_index(drop=True)
+    
+    # Fetch poster for each movie
+    result['poster'] = result['title'].apply(fetch_poster)
+    
+    return result
 
 
 # ── LLaMA3 via Ollama — mood extraction ──────────────────────────────────────

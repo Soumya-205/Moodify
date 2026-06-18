@@ -236,6 +236,23 @@ function updateMovies(movies) {
         const card = document.createElement("div");
         card.className = "movie-card";
 
+        // Poster
+        const poster = document.createElement("div");
+        poster.className = "movie-poster";
+        if (movie.poster) {
+            const img = document.createElement("img");
+            img.src = movie.poster;
+            img.alt = movie.title;
+            img.loading = "lazy";
+            poster.appendChild(img);
+        } else {
+            poster.textContent = "🎬";
+        }
+
+        // Info
+        const info = document.createElement("div");
+        info.className = "movie-info";
+
         const title = document.createElement("h3");
         title.textContent = movie.title || "Untitled";
 
@@ -258,12 +275,14 @@ function updateMovies(movies) {
             meta.appendChild(chip);
         });
 
-        card.appendChild(title);
-        card.appendChild(meta);
+        info.appendChild(title);
+        info.appendChild(meta);
+
+        card.appendChild(poster);
+        card.appendChild(info);
         moviesList.appendChild(card);
     });
 }
-
 // ── Tabs ─────────────────────────────────────────────────────────────────
 songsTab.addEventListener("click", () => {
     songsList.style.display = "flex";
