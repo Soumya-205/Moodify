@@ -25,13 +25,13 @@ Moodify is a full-stack AI-powered mood-based recommender that suggests **movies
 ## 📸 Screenshots
 
 ### Chat interface — mood detection in action
-![Moodify Chat](screenshots/moodify1.png)
+![Moodify Chat](screenshots/moodify5.png)
 
 ### Mood button selection
 ![Mood Buttons](screenshots/moodify2.png)
 
 ### Movies tab — sad mood
-![Movies Tab](screenshots/moodify3.png)
+![Movies Tab](screenshots/moodify4.png)
 
 ---
 
