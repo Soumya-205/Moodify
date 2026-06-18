@@ -58,7 +58,7 @@ LLaMA3 extracts mood (happy / sad / energetic / chill / romantic)
         ├── Song Recommender → cosine similarity on audio features
         │        ↓ top 5 matching tracks
         │
-        └── Movie Recommender → genre match + vote filter + TMDB API posters
+        └── Movie Recommender → genre match + vote filter + TMDB API 
                  ↓ top 5 matching films
         ↓
 LLaMA3 generates a warm personalised intro
