@@ -44,7 +44,7 @@ Moodify is a full-stack AI-powered mood-based recommender that suggests **movies
 | LLM | LLaMA3 via Ollama (local) |
 | Songs Data | Kaggle — Spotify Tracks Dataset (114k tracks, filtered to English) |
 | Movies Data | TMDB 5000 Movies Dataset + TMDB API for posters |
-| Frontend | HTML, CSS, Vanilla JavaScript |
+| Frontend | HTML, CSS, JavaScript |
 
 ---
 
@@ -58,7 +58,7 @@ LLaMA3 extracts mood (happy / sad / energetic / chill / romantic)
         ├── Song Recommender → cosine similarity on audio features
         │        ↓ top 5 matching tracks
         │
-        └── Movie Recommender → genre match + vote filter + TMDB API posters
+        └── Movie Recommender → genre match + vote filter + TMDB API 
                  ↓ top 5 matching films
         ↓
 LLaMA3 generates a warm personalised intro
